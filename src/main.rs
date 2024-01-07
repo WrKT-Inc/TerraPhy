@@ -15,21 +15,24 @@ impl Game {
 
     fn update(&mut self) {
         // Update game state here
-
-    }   
+    }
 
     fn draw(&self, context: Context, graphics: &mut G2d) {
         clear([1.0; 4], graphics);
-        ellipse([1.0, 0.0, 0.0, 1.0], // red color
-                self.circle,
-                context.transform,
-                graphics);
+        ellipse(
+            [1.0, 0.0, 0.0, 1.0], // red color
+            self.circle,
+            context.transform,
+            graphics,
+        );
     }
 }
 
 fn main() {
     let mut window: PistonWindow = WindowSettings::new("Hello Piston!", [640, 480])
-        .exit_on_esc(true).build().unwrap();
+        .exit_on_esc(true)
+        .build()
+        .unwrap();
 
     let mut game = Game::new();
 

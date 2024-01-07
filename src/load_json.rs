@@ -71,15 +71,3 @@ pub fn get_equations(json: &ClassicalPhysicsJson) -> HashMap<String, String> {
         })
         .collect()
 }
-
-fn main() {
-    match read_json("classical_physics.json") {
-        Ok(json) => {
-            println!("CONSTANTS: {:?}\n\n", get_physical_consts(&json));
-            println!("EQUATIONS: {:?}\n\n", get_equations(&json));
-        }
-        Err(e) => {
-            println!("Error: {}", e);
-        }
-    }
-}

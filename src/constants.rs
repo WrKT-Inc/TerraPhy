@@ -4,8 +4,8 @@ extern crate lazy_static;
 
 mod load_json;
 
-use load_json::{read_json, get_physical_consts, ClassicalPhysicsJson, get_equations};
 use lazy_static::lazy_static;
+use load_json::{get_equations, get_physical_consts, read_json, ClassicalPhysicsJson};
 use std::collections::HashMap;
 use std::fs;
 use std::io::Write;
@@ -26,7 +26,7 @@ lazy_static! {
 
 fn construct_equation_file(equations: &HashMap<String, String>) -> () {
     let filename: &str = "equations.rs";
-    
+
     println!("Constructing Equation File from json data: {}", filename);
     println!("Verify file does not exist: {}", filename);
     // check if file exists, if yes then overwrite it
@@ -42,12 +42,4 @@ fn construct_equation_file(equations: &HashMap<String, String>) -> () {
         file.write_all(b"\n").unwrap();
     }
     println!("Successfully constructed equation file!");
-}
-
-fn main() {
-    println!("Testing load json data from file: {}\n", JSON_FILENAME);
-    println!("CONSTANTS: {:?}\n\n", *PHYSICAL_CONSTS);
-    println!("EQUATIONS: {:?}\n\n", *EQUATIONS);
-    construct_equation_file(&*EQUATIONS);
-
 }

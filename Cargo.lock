@@ -1348,6 +1348,7 @@ dependencies = [
 name = "terra_phy"
 version = "0.1.0"
 dependencies = [
+ "lazy_static",
  "piston_window",
  "serde",
  "serde_json",
