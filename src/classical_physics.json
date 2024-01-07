@@ -14,6 +14,14 @@
         "distance": "Distance between the two objects, in m"
       },
       "result": "GRAVITAIONAL_CONST * mass1 * mass2 / (distance * distance)"
+    },
+    "find_velocity": {
+      "description": "Find the velocity of an object",
+      "variables": {
+        "distance": "Distance traveled, in m",
+        "time": "Time taken, in s"
+      },
+      "result": "distance / time"
     }
   }
 }
