@@ -1,0 +1,19 @@
+{
+  "name": "Classfical Physics",
+  "description": "This files contains all equations and gravity related to classical physics",
+  "constants": {
+    "GRAVITAIONAL_CONST": 6.6743e-11,
+    "GRAV_ACCELERATION": 9.80665
+  },
+  "equations": {
+    "find_force_gravity": {
+      "description": "Find the force of gravity between two objects, law of universal gravitation",
+      "variables": {
+        "mass1": "Mass of first object, in kg",
+        "mass2": "Mass of second object, in kg",
+        "distance": "Distance between the two objects, in m"
+      },
+      "result": "GRAVITAIONAL_CONST * mass1 * mass2 / (distance * distance)"
+    }
+  }
+}
