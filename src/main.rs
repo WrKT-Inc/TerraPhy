@@ -3,13 +3,13 @@ extern crate piston_window;
 use piston_window::*;
 
 struct Game {
-    circle: [f64; 4],
+    camera: [f64; 4], // Move the camera left, right, up, down
 }
 
 impl Game {
     fn new() -> Self {
         Game {
-            circle: [320.0, 240.0, 100.0, 100.0], // position and size
+            camera: [0.0, 0.0, 0.0, 0.0],
         }
     }
 
@@ -19,12 +19,6 @@ impl Game {
 
     fn draw(&self, context: Context, graphics: &mut G2d) {
         clear([1.0; 4], graphics);
-        ellipse(
-            [1.0, 0.0, 0.0, 1.0], // red color
-            self.circle,
-            context.transform,
-            graphics,
-        );
     }
 }
 
