@@ -10,54 +10,66 @@ use piston::input::{RenderEvent, UpdateEvent};
 use piston::window::WindowSettings;
 use piston::{RenderArgs, UpdateArgs};
 
-const WINDOW_SIZE: [u32; 2] = [1024, 768];
+const WINDOW_SIZE: [u32; 2] = [1366, 768];
 const APP_NAME: &str = "TerraPhy";
 
 pub struct App {
     gl: GlGraphics, // OpenGL drawing backend.
-    square_mass: f64,
-    square_x: f64,  // Keeps track of where the square is
-    square_y: f64,
-    square_width: f64,
+    square: Square,
+    ground: Ground
 }
+
+struct Ground {
+    width: f64,
+    height: f64,
+    color: [f32; 4],
+}
+
+struct Square {
+    x: f64,
+    y: f64,
+    width: f64,
+    height: f64,
+    mass: f64,
+    color: [f32; 4],
+}
+
 
 impl App {
     fn render(&mut self, args: &RenderArgs) {
         use graphics::*;
 
         const BACKGROUND: [f32; 4] = [1.0, 1.0, 1.0, 1.0];
-        const SQUARE_COLOR: [f32; 4] = [0.0, 0.0, 0.0, 1.0];
 
-        // create static brown ground
-        const GROUND_COLOR: [f32; 4] = [0.5, 0.3, 0.0, 1.0];
-        let ground_width = 1024.0;
-        let ground_height = 100.0;
-        let ground = rectangle::rectangle_by_corners(0.0, 0.0, ground_width, ground_height);
-        let ground_y = args.window_size[1] as f64 - ground_height;
+        let ground_color: [f32; 4] = self.ground.color;
+        let ground_y = args.window_size[1] as f64 - self.ground.height;
+        let ground = rectangle::rectangle_by_corners(0.0, ground_y, self.ground.width, args.window_size[1] as f64);
+        
 
-        let square = rectangle::square(0.0, 0.0, self.square_width);
-        let square_x = self.square_x;
-        let square_y = self.square_y;
-
-        //  Draw the square to screen.
+        let square_color: [f32; 4] = self.square.color;
+        let square = rectangle::rectangle_by_corners(self.square.x, self.square.y, self.square.x + self.square.width, self.square.y + self.square.height);
+        
+        //  Draw all objects
         self.gl.draw(args.viewport(), |c, gl| {
             clear(BACKGROUND, gl);
-            rectangle(SQUARE_COLOR, square, c.transform.trans(square_x, square_y), gl);
-            rectangle(GROUND_COLOR, ground, c.transform.trans(0.0, ground_y), gl);
+            rectangle(ground_color, ground, c.transform, gl);
+            rectangle(square_color, square, c.transform, gl);            
         });
 
     }
     fn update(&mut self, args: &UpdateArgs) {
-        self.square_x += 2.0 * args.dt;
+        // Apply horizontal velocity to square object
+        // self.square.x += 2.0 * args.dt;
+        // println!("square_x: {}", self.square.x);
 
-    //     check if the square_y is on the ground, if not the apply gravity
-        println!("square_x: {}", self.square_x);
-        println!("square_y: {}", self.square_y);
+        // check if the square_y is on the ground, if not the apply gravity
+        println!("square_y: {}", self.square.y);
 
-        // apply based on square mass
-        if self.square_y < 668.0 {
-            let acc = 0.5 * 9.8 * self.square_mass * args.dt * args.dt;
-            self.square_y += acc;
+        // apply gravity to square object
+        let center_y = self.square.y + self.square.width / 2.0;
+        if center_y < WINDOW_SIZE[1] as f64 - self.ground.height {
+            let acc = 0.5 * 9.8 * self.square.mass * args.dt * args.dt;
+            self.square.y += acc;
         }
     }
 }
@@ -73,10 +85,19 @@ fn main() {
 
     let mut app = App {
         gl: GlGraphics::new(opengl),
-        square_mass: 1000.0,
-        square_x: 0.0,
-        square_y: 0.0,
-        square_width: 50.0,
+        square: Square {
+            x: 0.0,
+            y: 0.0,
+            width: 50.0,
+            height: 50.0,
+            mass: 1000.0,
+            color: [0.0, 0.0, 0.0, 1.0],
+        },
+        ground: Ground {
+            width: WINDOW_SIZE[0] as f64 + 100.0,
+            height: 100.0,
+            color: [0.5, 0.3, 0.0, 1.0],
+        },
     };
 
     let mut events = Events::new(EventSettings::new());
@@ -84,6 +105,8 @@ fn main() {
     while let Some(e) = events.next(&mut window) {
         if let Some(args) = e.render_args() {
             app.render(&args);
+            // get window size 
+            // println!("window size: {:?}", args.window_size);
         }
 
         if let Some(args) = e.update_args() {
