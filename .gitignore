@@ -1,3 +1,5 @@
 /target
 # This is the generated file during code execution
 equations.rs
+
+.idea/
