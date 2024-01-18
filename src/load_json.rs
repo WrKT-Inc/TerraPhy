@@ -1,6 +1,7 @@
 // This module build the physical equations and constant from data defined in json files.
 use serde::Deserialize;
 use std::collections::HashMap;
+use std::path::PathBuf;
 
 #[derive(Deserialize, Debug)]
 pub struct ClassicalPhysicsJson {
@@ -14,11 +15,14 @@ pub struct ClassicalPhysicsJson {
 struct Equation {
     description: String,
     variables: HashMap<String, String>,
-    result: String, // This represent a programable equations in string format.
+    result: String, // This represent a programmable equations in string format.
 }
 
 pub fn read_json(filename: &str) -> Result<ClassicalPhysicsJson, Box<dyn std::error::Error>> {
-    let json_str = std::fs::read_to_string(filename)?;
+    let mut path = PathBuf::from("src");
+    path.push(filename);
+
+    let json_str = std::fs::read_to_string(path)?;
     let json: ClassicalPhysicsJson = serde_json::from_str(&json_str)?;
     Ok(json)
 }

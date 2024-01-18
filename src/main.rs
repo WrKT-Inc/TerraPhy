@@ -1,8 +1,16 @@
+
+extern crate lazy_static;
 extern crate glutin_window;
 extern crate graphics;
 extern crate opengl_graphics;
 extern crate piston;
+extern crate serde;
 
+mod constants;
+mod load_json;
+mod equations;
+
+use crate::constants::{PHYSICAL_CONSTS};
 use glutin_window::GlutinWindow as Window;
 use opengl_graphics::{GlGraphics, OpenGL};
 use piston::event_loop::{EventSettings, Events};
@@ -75,6 +83,7 @@ impl App {
 }
 
 fn main() {
+    // Set up OpenGL Engine
     let opengl = OpenGL::V3_2;
 
     let mut window: Window = WindowSettings::new(APP_NAME, WINDOW_SIZE)
